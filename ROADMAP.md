@@ -64,7 +64,9 @@ This approach keeps the demonstration focused and easy to follow while still dem
 - Shows a simple class with attributes and minimal methods
 - Demonstrates composition (used by Character class)
 - Illustrates a basic data structure
-=======
+
+## Project Structure
+
 ```
 rpg_game/
 ├── README.md           # Project documentation
@@ -80,25 +82,30 @@ rpg_game/
 ## Implementation Steps
 
 ### 1. Create File Structure
-
 - Create the files as outlined above
-- No need for `__init__.py` files or package structure
+- Use `__init__.py` files to make it a proper Python package
+- Organize code into logical modules
 
 ### 2. Extract Utility Functions
-
 - Move `clear_screen()`, `press_enter()`, and `print_border()` to `console_utils.py`
 - Move `GameLogger` class to `game_logger.py`
+- Implement proper error handling and platform detection
 
 ### 3. Extract Game Entities
-
 - Move `Weapon` class to `weapon.py`
 - Move `Character` class to `character.py`
   - Add import for `Weapon` and `GameLogger`
+  - Implement proper encapsulation with private attributes
 - Move `Boss` class to `boss.py`
   - Add import for `Character`
+  - Implement inheritance and method overriding
 
-### 4. Extract Game Logic
->>>>>>> e6aac784b800ffb903dea0ebae9f08e14495f1d2
+### 4. Implement Game Logic in Game Class
+- Move main game loop to `Game` class in `game.py`
+- Implement game state management
+- Handle user input and game flow
+- Add save/load functionality
+- Implement combat mechanics
 
 ### Character Class
 - Demonstrates encapsulation with private attributes and getters/setters
@@ -245,9 +252,43 @@ These constants are imported and used throughout the codebase, particularly in t
 ### 4. Documentation
 - **Code Comments**:
   - Add explanatory comments for complex logic
-  - Document design decisions
-          # Enhanced defence logic
-          pass
+  - Document design decisions and trade-offs
+  - Include examples in docstrings
+  - Keep comments up-to-date with code changes
+
+### Example of Good Comments:
+
+```python
+def calculate_damage(attacker, defender):
+    """
+    Calculate damage dealt by attacker to defender.
+    
+    Args:
+        attacker: Character or Boss instance making the attack
+        defender: Character or Boss instance receiving the attack
+        
+    Returns:
+        int: Amount of damage dealt, considering defense mechanisms
+        
+    Example:
+        >>> player = Character("Hero", 100, 10)
+        >>> enemy = Boss("Dragon", 200, 20)
+        >>> damage = calculate_damage(player, enemy)
+    """
+    base_damage = attacker.attack_power
+    # Apply defense reduction (minimum 1 damage)
+    damage = max(1, base_damage - defender.defense // 2)
+    return damage
+```
+
+### Enhanced Defense Logic
+
+When implementing defense mechanics, consider these aspects:
+1. **Base Defense**: Each character has a base defense value
+2. **Armor/Items**: Additional defense from equipped items
+3. **Status Effects**: Temporary buffs/debuffs that modify defense
+4. **Critical Hits**: Chance to bypass some defense
+5. **Elemental Weaknesses/Resistances**: Special damage modifiers
   
   player = Player("Hero", 100, 10)
   sidekick = DefenderSidekick("Robin", 60, 5)

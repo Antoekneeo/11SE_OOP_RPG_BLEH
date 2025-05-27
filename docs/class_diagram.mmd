@@ -1,0 +1,94 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'primaryColor': '#E8F4F8',
+    'primaryBorderColor': '#2C3E50',
+    'primaryTextColor': '#2C3E50',
+    'lineColor': '#2C3E50',
+    'secondaryColor': '#E8F8F4',
+    'tertiaryColor': '#F8F4E8',
+    'fontFamily': 'Arial, sans-serif'
+  },
+  'themeConfig': {
+    'fontFamily': 'Arial, sans-serif'
+  }
+}}%%
+
+classDiagram
+    %% Class definitions with styling
+    class Game {
+        <<Controller>>
+        -player: Character
+        -boss: Boss
+        -game_state: str
+        -logger: GameLogger
+        +run() void
+        +handle_input() void
+        +update() void
+        +render() void
+        +change_state() void
+    }
+
+    class Character {
+        <<Abstract>>
+        #name: str
+        #health: int
+        #max_health: int
+        #attack_power: int
+        #weapon: Weapon
+        #logger: GameLogger
+        +attack(target: Character) void
+        +take_damage(amount: int) void
+        +is_alive() bool
+        +special_ability()* void
+    }
+
+    class Boss {
+        -special_attack_damage: int
+        -special_attack_chance: float
+        +attack(target: Character) void
+        +special_ability() void
+    }
+
+    class Weapon {
+        -name: str
+        -damage: int
+        -durability: int
+        +get_damage() int
+        +use() void
+        +__str__() str
+    }
+
+    class GameLogger {
+        -log_file: str
+        +log(message: str, level: str) void
+        +clear_log() void
+        +get_logs() list[str]
+    }
+
+    %% Relationships
+    Game "1" *-- "1" Character : contains >
+    Game "1" *-- "0..1" Boss : contains >
+    Character <|-- Boss : inherits
+    Character "1" *-- "1" Weapon : wields >
+    Character "1" *-- "1" GameLogger : uses >
+    Game "1" *-- "1" GameLogger : uses >
+
+    %% Styling
+    classDef controller fill:#E8F8F4,stroke:#2C3E50,stroke-width:2px;
+    classDef entity fill:#E8F4F8,stroke:#2C3E50,stroke-width:2px;
+    classDef utility fill:#F8F4E8,stroke:#2C3E50,stroke-width:2px;
+    classDef abstract fill:#E8F4F8,stroke:#2C3E50,stroke-width:2px,stroke-dasharray: 5 5;
+    
+    %% Apply styles
+    class Game controller;
+    class Character,Weapon,Boss entity;
+    class GameLogger utility;
+    class Character abstract;
+
+    %% Notes
+    note for Game "Manages game state and main loop\n- Handles input and rendering\n- Coordinates all game objects"
+    note for Character "Base class for all characters\n- Implements common attributes\n- Defines abstract methods"
+    note for Boss "Special enemy character\n- Has special attacks\n- Unique abilities"
+    note for Weapon "Represents player weapons\n- Tracks durability\n- Calculates damage"
+    note for GameLogger "Handles game logging\n- Writes to file\n- Manages log levels"

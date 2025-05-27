@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Console Utilities**:
+  - Enhanced terminal UI with ANSI color support
+  - Added `print_header()`, `print_success()`, and `print_error()` helper functions
+  - Improved user input handling with `get_user_choice()` and `show_menu()`
+  - Added colored borders and visual feedback
+  - Maintained backward compatibility with existing code
+
+### Fixed
+- Fixed import errors caused by missing `print_border` function
+- Improved error handling in console input functions
+
+### Changed
+- Updated console output to use consistent color scheme
+- Enhanced user prompts with better formatting and feedback
+
+### Added
 - **Save Game System**:
   - Refactored save game functionality for better testability
   - Added `set_save_paths()` function to support testing
@@ -20,6 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added comprehensive UML class diagram to README.md
   - Enhanced project structure documentation
   - Added detailed design patterns documentation
+  - Resolved merge conflicts in ROADMAP.md
+  - Added detailed implementation steps and code examples
+  - Enhanced documentation on defense mechanics and code organization
 - **Code Organization**:
   - Centralized game constants in `constants.py`
   - Improved package initialization in `__init__.py`
