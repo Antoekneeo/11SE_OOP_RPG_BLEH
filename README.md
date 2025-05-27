@@ -1,28 +1,46 @@
 # RPG Lesson: Object-Oriented Programming 
 
+## Educational Purpose
+
+This project is designed as an educational tool to demonstrate Object-Oriented Programming (OOP) concepts in Python. The code is intentionally structured to be clear, readable, and easy to understand for students learning OOP principles.
+
+## Running the Game
+
+To run the game, simply execute:
+
+```
+python main.py
+```
+
+No installation or setup is required - just clone the repository and run the main file.
 
 ## Project Structure
 
-This project demonstrates OOP concepts in Python with a modular structure:
+This project uses a simple, modular structure to demonstrate OOP concepts:
 
-### Main Files
-- `main.py` - Entry point for the game
-- `game.py` - Main Game class implementation
-- `character.py` - Base Character class
-- `boss.py` - Boss class (inherits from Character)
-- `weapon.py` - Weapon class
+### Core Game Files
+- `main.py` - Entry point to run the game
+- `game.py` - Game class and main game logic
+- `character.py` - Character class implementation
+- `boss.py` - Boss class that inherits from Character
+- `weapon.py` - Weapon class implementation
 - `game_logger.py` - Game logging functionality
-- `console_utils.py` - Console utility functions
-- `save_game.py` - Game state persistence
+- `console_utils.py` - Console UI utilities
+- `save_game.py` - Save/load game functionality
 
 ### Documentation
 - `README.md` - Project documentation
 - `ROADMAP.md` - Development plans
 - `CHANGELOG.md` - Version history and changes
-- `UML_class_diagram.md` - Class structure and relationships
 
 ### Tests
 - `tests/` - Directory containing all test files
+  - `test_character.py` - Tests for Character class
+  - `test_boss.py` - Tests for Boss class
+  - `test_weapon.py` - Tests for Weapon class
+  - `test_game.py` - Tests for Game class
+  - `test_save_game.py` - Tests for save/load functionality
+  - `conftest.py` - Test fixtures
 - `pytest.ini` - Pytest configuration
 - `requirements-dev.txt` - Development dependencies
 
@@ -193,9 +211,4 @@ pytest tests/test_character.py::TestCharacter::test_character_creation
 
 ## Future Enhancements
 
-See [ROADMAP.md](ROADMAP.md) for planned improvements, including:
-- Refactoring into a multi-file package structure
-- Adding new character types and abilities
-- Implementing an inventory system
-- Enhancing the combat system
-
+See [ROADMAP.md](ROADMAP.md) for planned improvements.
