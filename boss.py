@@ -5,53 +5,71 @@ This module defines the Boss class which represents boss enemies in the game.
 Bosses are special types of characters with enhanced abilities.
 """
 
+import random
 from typing import Any, Optional
 from character import Character
+from weapon import Weapon
 
 
 class Boss(Character):
-    """
-    Represents a boss enemy in the game.
+    """A boss enemy in the game."""
     
-    This class demonstrates inheritance by extending the Character class.
-    """
-    
-    def __init__(self, name: str, health: int, damage: int) -> None:
+    def __init__(self, name: str, health: int, damage: int):
         """
         Initialize a new boss.
         
         Args:
-            name: The boss's name
+            name: The name of the boss
             health: The boss's health points
             damage: The boss's base damage
         """
-        # Call the parent class's __init__ with weapon details
-        super().__init__(name, health, damage, "Boss Weapon", 5)
+        super().__init__(name, health, damage)
+        self.weapon = Weapon("Boss Weapon", 5)  # Bosses always have a weapon
     
     def attack(self, enemy: Any, logger: Optional[Any] = None) -> int:
         """
-        Attack an enemy with a special boss attack.
-        
-        Overrides the parent class's attack method to add a special attack.
+        Attack an enemy character with a chance for a special attack.
         
         Args:
             enemy: The enemy character to attack
-            logger: Optional GameLogger instance for logging combat
+            logger: Optional logger for combat messages
             
         Returns:
-            The total damage dealt (base damage + weapon bonus + special damage)
+            int: The amount of damage dealt
         """
-        # Call the parent class's attack method
-        total_damage = super().attack(enemy, logger)
+        # Bosses have a 25% chance to do a special attack
+        special_attack = random.random() < 0.25
         
-        # Boss special attack: additional damage
-        additional_damage = 1
-        enemy.health -= additional_damage
+        damage = self.damage
+        if self.weapon:
+            damage += self.weapon.damage_bonus
         
-        print(f"{self.name} uses a special attack! (+{additional_damage} Damage)")
+        if special_attack:
+            # Special attack does 1.5x damage
+            damage = int(damage * 1.5)
         
-        # Log the special attack if a logger is provided
+        # Store initial health for damage calculation
+        initial_health = enemy.health
+        enemy.take_damage(damage)
+        actual_damage = initial_health - enemy.health
+        
         if logger:
-            logger.log_combat(self, enemy, additional_damage)
+            logger.log_combat(attacker=self.name,
+                           defender=enemy.name,
+                           damage=actual_damage,
+                           is_critical=special_attack)
             
-        return total_damage + additional_damage
+        return actual_damage
+    
+    def take_damage(self, amount: int) -> None:
+        """
+        Reduce the boss's health by the given amount.
+        
+        Args:
+            amount: Amount of damage to take
+        """
+        self.health -= amount
+        
+        # Check if boss is defeated
+        if self.health <= 0:
+            print(f"{self.name} has been defeated!")

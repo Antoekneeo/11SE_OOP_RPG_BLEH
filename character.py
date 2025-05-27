@@ -49,28 +49,48 @@ class Character:
         """
         self._health = max(0, value)
     
+    @property
+    def is_alive(self) -> bool:
+        """Check if the character is alive."""
+        return self.health > 0
+    
+    def take_damage(self, amount: int) -> None:
+        """
+        Reduce the character's health by the given amount.
+        
+        Args:
+            amount: Amount of damage to take (negative values will be treated as 0)
+        """
+        if amount > 0:
+            self.health -= amount
+    
     def attack(self, enemy: Any, logger: Optional[Any] = None) -> int:
         """
         Attack an enemy character.
-        
+
         Args:
             enemy: The enemy character to attack
-            logger: Optional GameLogger instance for logging combat
-            
+            logger: Optional logger for combat messages
+
         Returns:
-            The total damage dealt
+            int: The amount of damage dealt
         """
-        weapon_bonus = self.weapon.damage_bonus if self.weapon else 0
-        total_damage = self.damage + weapon_bonus
-        
-        # Deal damage to the enemy
-        enemy.health -= total_damage
-        
-        # Log the combat if a logger is provided
+        damage = self.damage
+        if self.weapon:
+            damage += self.weapon.damage_bonus
+
+        # Store initial health for damage calculation
+        initial_health = enemy.health
+        enemy.take_damage(damage)
+        actual_damage = initial_health - enemy.health
+
         if logger:
-            logger.log_combat(self, enemy, total_damage)
-            
-        return total_damage
+            logger.log_combat(attacker=self.name, 
+                           defender=enemy.name, 
+                           damage=actual_damage,
+                           is_critical=False)
+
+        return actual_damage
     
     def display(self) -> None:
         """Display the character's information."""

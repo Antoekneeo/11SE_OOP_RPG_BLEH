@@ -3,12 +3,28 @@
 
 ## Project Structure
 
-This is a single-file implementation demonstrating OOP concepts in Python:
+This project demonstrates OOP concepts in Python with a modular structure:
 
-- `rpg_oop_concepts.py` - Main game implementation
+### Main Files
+- `main.py` - Entry point for the game
+- `game.py` - Main Game class implementation
+- `character.py` - Base Character class
+- `boss.py` - Boss class (inherits from Character)
+- `weapon.py` - Weapon class
+- `game_logger.py` - Game logging functionality
+- `console_utils.py` - Console utility functions
+- `save_game.py` - Game state persistence
+
+### Documentation
 - `README.md` - Project documentation
 - `ROADMAP.md` - Development plans
+- `CHANGELOG.md` - Version history and changes
 - `UML_class_diagram.md` - Class structure and relationships
+
+### Tests
+- `tests/` - Directory containing all test files
+- `pytest.ini` - Pytest configuration
+- `requirements-dev.txt` - Development dependencies
 
 ## COIPEA: Core OOP Concepts Demonstrated
 
@@ -108,6 +124,49 @@ For a detailed analysis of UML concepts in this code, see [UML_class_diagram.md]
 3. **Limited Visibility Examples**
    - Doesn't demonstrate private/protected attributes with Python's underscore convention
    - Missing encapsulation examples with getters/setters
+
+## Development
+
+### Setting Up for Development
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd 11SE_OOP_RPG_BLEH
+   ```
+
+2. **Set up a virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install development dependencies**
+   ```bash
+   pip install -r requirements-dev.txt
+   ```
+
+### Running Tests
+
+To run all tests:
+```bash
+pytest
+```
+
+To run tests with coverage report:
+```bash
+pytest --cov=.
+```
+
+To run a specific test file:
+```bash
+pytest tests/test_character.py
+```
+
+To run a specific test case:
+```bash
+pytest tests/test_character.py::TestCharacter::test_character_creation
+```
 
 ## Learning Recommendations
 

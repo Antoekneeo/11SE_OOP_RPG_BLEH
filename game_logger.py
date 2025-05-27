@@ -25,20 +25,19 @@ class GameLogger:
         """
         self.log_to_console = log_to_console
         
-    def log_combat(self, attacker: Any, defender: Any, damage: int) -> None:
+    def log_combat(self, attacker: str, defender: str, damage: int, is_critical: bool = False) -> None:
         """
-        Log a combat event.
+        Log a combat message.
         
         Args:
-            attacker: The attacking character
-            defender: The defending character
-            damage: The amount of damage dealt
-            
-        Returns:
-            None
+            attacker: Name of the attacker
+            defender: Name of the defender
+            damage: Amount of damage dealt
+            is_critical: Whether the attack was a critical hit
         """
         timestamp = datetime.datetime.now().strftime("%H:%M:%S")
-        log_message = f"[{timestamp}] COMBAT LOG: {attacker.name} attacked {defender.name} for {damage} damage"
+        crit_msg = " (CRITICAL!)" if is_critical else ""
+        log_message = f"[{timestamp}] COMBAT LOG: {attacker} attacks {defender} for {damage} damage{crit_msg}"
         if self.log_to_console:
             print(log_message)
         # Future enhancement: could log to file, database, etc.

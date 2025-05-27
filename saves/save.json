@@ -1,0 +1,18 @@
+{
+  "player": {
+    "name": "TestHero",
+    "health": 100,
+    "damage": 10,
+    "weapon": {
+      "name": "Sword",
+      "damage_bonus": 5
+    }
+  },
+  "bosses": [
+    {
+      "name": "TestBoss",
+      "health": 50,
+      "damage": 5
+    }
+  ]
+}

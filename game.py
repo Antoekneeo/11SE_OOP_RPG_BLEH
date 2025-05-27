@@ -4,12 +4,16 @@ Game class for the RPG game.
 This module defines the main Game class that manages the game flow and state.
 """
 
-from typing import List, Optional, Dict, Any, Tuple
+from typing import List, Optional, Dict, Any, Tuple, Union
 import random
+import json
+from pathlib import Path
 from console_utils import clear_screen, press_enter, print_border
 from character import Character
 from boss import Boss
 from game_logger import GameLogger
+from weapon import Weapon
+from save_game import save_game, load_game, delete_save
 
 
 class Game:
@@ -24,6 +28,9 @@ class Game:
         self.player: Optional[Character] = None
         self.bosses: List[Boss] = []
         self.logger: GameLogger = GameLogger()
+        self.save_dir = Path.home() / "rpg_saves"
+        self.save_dir.mkdir(exist_ok=True)
+        self.save_file = self.save_dir / "save.json"
     
     def show_intro(self) -> None:
         """Display the game introduction and setup the game."""
@@ -130,12 +137,45 @@ class Game:
         print("-" * 30)
     
     def handle_boss_battles(self) -> None:
-        """Handle the sequence of boss battles."""
-        for boss in self.bosses:
-            self.introduce_boss(boss)
-            if not self.combat(self.player, boss):
-                self.end_game(False)
-                return
+        """Handle the sequence of boss battles with save option."""
+        while self.bosses:  # Continue while there are bosses left
+            boss = self.bosses[0]  # Get the next boss
+            
+            # Show battle options
+            clear_screen()
+            print(f"You are about to face {boss.name}!\n")
+            print("1. Fight the boss")
+            print("2. Save game and continue")
+            print("3. Save and quit")
+            
+            choice = input("\nEnter your choice (1-3): ")
+            
+            if choice == '1':
+                # Fight the boss
+                self.introduce_boss(boss)
+                if not self.combat(self.player, boss):
+                    self.end_game(False)
+                    return
+                # Remove defeated boss
+                self.bosses.pop(0)
+                
+                # Only show victory message if there are more bosses
+                if self.bosses:
+                    print(f"\nYou defeated {boss.name}!")
+                    print(f"Prepare to face {self.bosses[0].name} next!")
+                    press_enter()
+                
+            elif choice == '2':
+                # Save and continue
+                self.save_current_game()
+                
+            elif choice == '3':
+                # Save and quit
+                self.save_current_game()
+                print("\nGame saved. Goodbye!")
+                exit()
+            
+        # If we get here, all bosses are defeated
         self.end_game(True)
     
     def introduce_boss(self, boss: Boss) -> None:
@@ -181,21 +221,141 @@ class Game:
         print(f"Defeat! You were defeated by {enemy.name}.")
         press_enter()
     
+    def show_main_menu(self) -> str:
+        """
+        Display the main menu and handle user selection.
+        
+        Returns:
+            str: The selected menu option ('new' or 'load')
+        """
+        while True:
+            clear_screen()
+            print("RPG Adventure")
+            print("=" * 40)
+            print("1. New Game")
+            print("2. Load Game")
+            print("3. Quit")
+            
+            choice = input("\nEnter your choice (1-3): ")
+            
+            if choice == '1':
+                return "new"
+            elif choice == '2':
+                if self.load_game():
+                    return "load"
+                press_enter()
+            elif choice == '3':
+                print("\nThank you for playing!")
+                exit()
+    
+    def get_game_state(self) -> Dict[str, Any]:
+        """
+        Get the current game state as a dictionary.
+        
+        Returns:
+            Dict[str, Any]: The game state
+        """
+        if not self.player:
+            return {}
+            
+        return {
+            'player': {
+                'name': self.player.name,
+                'health': self.player.health,
+                'damage': self.player.damage,
+                'weapon': {
+                    'name': self.player.weapon.name if self.player.weapon else None,
+                    'damage_bonus': self.player.weapon.damage_bonus if self.player.weapon else 0
+                }
+            },
+            'bosses': [
+                {
+                    'name': boss.name,
+                    'health': boss.health,
+                    'damage': boss.damage
+                }
+                for boss in self.bosses
+            ]
+        }
+    
+    def load_game(self) -> bool:
+        """
+        Load a saved game state from a file.
+        
+        Returns:
+            bool: True if load was successful, False otherwise
+        """
+        if not self.save_file.exists():
+            return False
+            
+        try:
+            with open(self.save_file, 'r') as f:
+                game_state = json.load(f)
+                
+            # Restore player state
+            player_data = game_state['player']
+            self.player = Character(
+                player_data['name'],
+                player_data['health'],
+                player_data['damage'],
+                player_data['weapon']['name'],
+                player_data['weapon']['damage_bonus']
+            )
+            
+            # Restore bosses state
+            self.bosses = []
+            for boss_data in game_state['bosses']:
+                boss = Boss(boss_data['name'], boss_data['health'], boss_data['damage'])
+                self.bosses.append(boss)
+                
+            return True
+            
+        except Exception as e:
+            print(f"Error loading game: {e}")
+            return False
+    
+    def save_current_game(self) -> bool:
+        """
+        Save the current game state to a file.
+        
+        Returns:
+            bool: True if save was successful, False otherwise
+        """
+        try:
+            game_state = self.get_game_state()
+            with open(self.save_file, 'w') as f:
+                json.dump(game_state, f, indent=2)
+            return True
+        except Exception as e:
+            print(f"Error saving game: {e}")
+            return False
+    
     def end_game(self, player_won: bool) -> None:
         """
-        End the game and display the appropriate message.
+        Display the end game message and prompt to play again.
         
         Args:
             player_won: Whether the player won the game
         """
-        print_border()
+        clear_screen()
         if player_won:
-            print("Congratulations! You have defeated all the bosses and saved the kingdom!")
+            print("Congratulations! You've defeated all the bosses and saved the kingdom!")
         else:
             print("Game Over! The forces of darkness have prevailed...")
-        print("\nThanks for playing!")
+            
+        play_again = input("\nWould you like to play again? (y/n): ").lower()
+        if play_again == 'y':
+            # Clear the save when starting a new game after ending
+            delete_save()
+            self.player = None
+            self.bosses = []
+            self.run()
+        else:
+            print("\nThank you for playing!")
+            exit()
     
     def run(self) -> None:
         """Run the main game loop."""
-        self.show_intro()
+        if self.show_main_menu() == "new":
+            self.show_intro()
         self.handle_boss_battles()
