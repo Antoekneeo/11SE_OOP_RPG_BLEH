@@ -1,0 +1,117 @@
+@startuml RPG Game Class Diagram
+
+' Enable PlantUML skin parameters
+skinparam class {
+    BackgroundColor White
+    ArrowColor #2c3e50
+    BorderColor #2c3e50
+    ArrowThickness 1.5
+    AttributeFontSize 12
+    AttributeFontStyle plain
+    AttributeFontColor #2c3e50
+    MethodFontSize 12
+    MethodFontStyle plain
+    MethodFontColor #2c3e50
+    HeaderBackgroundColor #3498db
+    HeaderFontColor White
+    HeaderFontStyle bold
+    FontSize 14
+    FontName Arial
+}
+
+' Define classes with their attributes and methods
+class Game {
+    -player: Character
+    -current_boss: Boss
+    -is_running: bool
+    -logger: GameLogger
+    +run(): None
+    -setup_game(): None
+    -main_menu(): None
+    -game_loop(): None
+    -handle_combat(): None
+    -game_over(victory: bool): None
+}
+
+class Character {
+    #name: str
+    #health: int
+    #max_health: int
+    #weapon: Weapon
+    #logger: GameLogger
+    +__init__(name: str, health: int, weapon: Weapon, logger: GameLogger)
+    +attack(target: 'Character') -> None
+    +take_damage(amount: int) -> None
+    +is_alive() -> bool
+    #calculate_damage() -> int
+    +__str__() -> str
+    {abstract} #special_ability() -> None
+}
+
+class Boss {
+    -special_attack_chance: float
+    -special_attack_multiplier: float
+    +__init__(name: str, health: int, damage: int, weapon: Weapon, logger: GameLogger)
+    +attack(target: 'Character') -> None
+    -special_attack(target: 'Character') -> None
+}
+
+class Weapon {
+    -name: str
+    -damage: int
+    -description: str
+    +__init__(name: str, damage: int, description: str = "")
+    +get_damage() -> int
+    +__str__() -> str
+}
+
+class GameLogger {
+    -log_file: str
+    +__init__(log_file: str = "game.log")
+    +log(message: str, level: str = "INFO") -> None
+    +clear_log() -> None
+}
+
+class ConsoleUtils {
+    +clear_screen() -> None
+    +press_enter() -> None
+    +print_border(length: int = 50, char: str = "=") -> None
+    +get_user_choice(options: List[str]) -> int
+}
+
+class SaveGame {
+    +save_game(game_state: dict, filename: str) -> bool
+    +load_game(filename: str) -> dict
+    +delete_save(filename: str) -> bool
+}
+
+' Define relationships
+Game "1" *-- "1" Character : contains >
+Game "1" *-- "0..1" Boss : contains >
+Character "1" *-- "1" Weapon : wields >
+Boss --|> Character : inherits from
+Character "1" *-- "1" GameLogger : uses >
+Game "1" *-- "1" GameLogger : uses >
+
+' Add notes for important design decisions
+note top of Game
+  The Game class manages the main game loop,
+  player input, and coordinates all game objects.
+  It follows the State pattern for different
+  game states (menu, combat, game over).
+end note
+
+note right of Character
+  The Character class is an abstract base class
+  that defines the common interface for all
+  characters in the game, including the player
+  and non-player characters.
+end note
+
+note left of Boss
+  The Boss class extends Character and adds
+  special attack capabilities. It demonstrates
+  inheritance and method overriding.
+end note
+
+@enduml

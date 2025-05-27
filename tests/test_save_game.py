@@ -4,49 +4,49 @@ Tests for the save_game module.
 import os
 import json
 import pytest
-from pathlib import Path
-import json
-import os
 import tempfile
 from pathlib import Path
 from unittest.mock import patch, mock_open
-from save_game import save_game, load_game, delete_save, SAVE_FILE, SAVE_DIR
+
+# Import the module to test
+import rpg_game.save_game as save_game_module
+from rpg_game.save_game import save_game, load_game, delete_save, set_save_paths
 
 @pytest.fixture
-def temp_save_file(monkeypatch, tmp_path):
+def temp_save_file(tmp_path):
     """Fixture to create a temporary save file for testing."""
     # Create a temporary save directory
     temp_save_dir = tmp_path / "saves"
     temp_save_dir.mkdir()
     temp_save_file = temp_save_dir / "save.json"
     
-    # Monkeypatch the SAVE_FILE and SAVE_DIR
-    monkeypatch.setattr('save_game.SAVE_DIR', str(temp_save_dir))
-    monkeypatch.setattr('save_game.SAVE_FILE', str(temp_save_file))
+    # Set the save paths for testing
+    set_save_paths(str(temp_save_dir), str(temp_save_file))
     
-    return temp_save_file
+    yield temp_save_file
 
 class TestSaveGame:
     """Test cases for the save_game module."""
     
-    def test_save_dir_creation(self, tmp_path, monkeypatch):
+    def test_save_dir_creation(self, tmp_path):
         """Test that save directory is created if it doesn't exist."""
+        # Set up test paths
         temp_save_dir = tmp_path / "test_saves"
         temp_save_file = temp_save_dir / "save.json"
         
         # Ensure directory doesn't exist initially
         assert not temp_save_dir.exists()
         
-        # Monkeypatch the paths
-        monkeypatch.setattr('save_game.SAVE_DIR', str(temp_save_dir))
-        monkeypatch.setattr('save_game.SAVE_FILE', str(temp_save_file))
+        # Set the save paths for testing
+        set_save_paths(str(temp_save_dir), str(temp_save_file))
         
         # This should create the directory
         save_game({})
         
-        # Verify directory was created
+        # Check directory was created
         assert temp_save_dir.exists()
-        
+        assert temp_save_file.exists()
+
     def test_save_game(self, temp_save_file):
         """Test saving game state to file."""
         test_data = {
@@ -137,18 +137,22 @@ class TestSaveGame:
         # Should return True even if file didn't exist
         assert delete_save() is True
     
-    def test_delete_save_error(self, monkeypatch, tmp_path):
+    def test_delete_save_error(self, tmp_path, monkeypatch):
         """Test error handling when deleting save file fails."""
         # Create a temporary file that will cause the mock to be used
-        temp_file = tmp_path / "save.json"
+        temp_dir = tmp_path / "test_saves"
+        temp_dir.mkdir()
+        temp_file = temp_dir / "save.json"
         temp_file.write_text("test")
+        
+        # Set the save paths for testing
+        set_save_paths(str(temp_dir), str(temp_file))
         
         # Mock os.remove to raise an OSError
         def mock_remove(*args, **kwargs):
             raise OSError("Mocked OSError")
             
         monkeypatch.setattr('os.remove', mock_remove)
-        monkeypatch.setattr('save_game.SAVE_FILE', str(temp_file))
         
         # This should call our mock and return False due to the error
         assert delete_save() is False

@@ -1,10 +1,11 @@
 """
 Test script to verify imports are working correctly.
 """
-from rpg_game.character import Character, Boss
+from rpg_game.character import Character
+from rpg_game.boss import Boss
 from rpg_game.weapon import Weapon
-from rpg_game.utils.logger import GameLogger
-from rpg_game.utils.console import print_border
+from rpg_game.game_logger import GameLogger
+from rpg_game.console_utils import print_border
 
 
 def test_imports():

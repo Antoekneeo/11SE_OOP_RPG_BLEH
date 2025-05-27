@@ -6,10 +6,10 @@ import pytest
 import sys
 import io
 from unittest.mock import patch, Mock
-from character import Character
-from boss import Boss
-from weapon import Weapon
-from game_logger import GameLogger
+from rpg_game.character import Character
+from rpg_game.boss import Boss
+from rpg_game.weapon import Weapon
+from rpg_game.game_logger import GameLogger
 
 
 class TestCharacter:

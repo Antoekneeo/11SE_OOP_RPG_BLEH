@@ -6,7 +6,7 @@ and non-playable characters in the game.
 """
 
 from typing import Optional, Any
-from weapon import Weapon
+from rpg_game.weapon import Weapon
 
 
 class Character:
@@ -48,6 +48,15 @@ class Character:
             value: The new health value
         """
         self._health = max(0, value)
+    
+    def get_health(self) -> int:
+        """
+        Get the character's current health.
+        
+        Returns:
+            The character's current health points
+        """
+        return self.health
     
     @property
     def is_alive(self) -> bool:

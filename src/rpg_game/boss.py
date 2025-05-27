@@ -7,8 +7,8 @@ Bosses are special types of characters with enhanced abilities.
 
 import random
 from typing import Any, Optional
-from character import Character
-from weapon import Weapon
+from rpg_game.character import Character
+from rpg_game.weapon import Weapon
 
 
 class Boss(Character):

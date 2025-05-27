@@ -1,57 +1,228 @@
-# RPG Lesson: Object-Oriented Programming 
+# RPG Lesson: Object-Oriented Programming
+
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ## Educational Purpose
 
 This project is designed as an educational tool to demonstrate Object-Oriented Programming (OOP) concepts in Python. The code is intentionally structured to be clear, readable, and easy to understand for students learning OOP principles.
 
+## Features
+
+- **Core OOP Principles**: Demonstrates classes, objects, inheritance, polymorphism, encapsulation, and abstraction
+- **Modular Design**: Clean separation of concerns with dedicated modules for different game components
+- **Type Hints**: Comprehensive type annotations for better code clarity and IDE support
+- **Testing**: Comprehensive test suite with pytest
+- **Documentation**: Detailed docstrings and project documentation
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/antoekneeo/11SE_OOP_RPG_BLEH.git
+   cd 11SE_OOP_RPG_BLEH
+   ```
+
+2. (Optional) Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. Install the package in development mode:
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
 ## Running the Game
 
-To run the game, simply execute:
+### As a Package
+```bash
+python -m rpg_game
+```
+
+### Using the Entry Point
+```bash
+rpg-game
+```
+
+### Directly from Source
+```bash
+python src/rpg_game/__main__.py
+```
+
+## Project Structure and Design
+
+### UML Class Diagram
+
+```mermaid
+classDiagram
+    class Game {
+        -player: Character
+        -current_boss: Boss
+        -is_running: bool
+        -logger: GameLogger
+        +run()
+        -setup_game()
+        -main_menu()
+        -game_loop()
+        -handle_combat()
+    }
+    
+    class Character {
+        #name: str
+        #health: int
+        #max_health: int
+        #weapon: Weapon
+        #logger: GameLogger
+        +attack(target: Character)
+        +take_damage(amount: int)
+        +is_alive() bool
+        #calculate_damage() int
+    }
+    
+    class Boss {
+        -special_attack_chance: float
+        -special_attack_multiplier: float
+        +attack(target: Character)
+        -special_attack(target: Character)
+    }
+    
+    class Weapon {
+        -name: str
+        -damage: int
+        -description: str
+        +get_damage() int
+    }
+    
+    Game "1" *-- "1" Character : contains >
+    Game "1" *-- "0..1" Boss : contains >
+    Character "1" *-- "1" Weapon : wields >
+    Boss --|> Character : inherits from
+    Character "1" *-- "1" GameLogger : uses >
+    Game "1" *-- "1" GameLogger : uses >
+```
+
+### Project Structure
 
 ```
-python main.py
+11SE_OOP_RPG_BLEH/
+├── src/
+│   └── rpg_game/          # Main package
+│       ├── __init__.py     # Package initialization and public API
+│       ├── __main__.py     # Entry point
+│       ├── boss.py         # Boss class (inherits from Character)
+│       ├── character.py    # Base Character class
+│       ├── console_utils.py # Console utilities
+│       ├── constants.py    # Game configuration and constants
+│       ├── game.py         # Main game logic
+│       ├── game_logger.py  # Game logging
+│       ├── save_game.py    # Save/load functionality
+│       └── weapon.py       # Weapon class
+├── tests/                  # Test suite
+│   ├── __init__.py
+│   ├── conftest.py         # Test fixtures
+│   ├── test_boss.py
+│   ├── test_character.py
+│   ├── test_game.py
+│   └── test_weapon.py
+├── .gitignore             # Git ignore rules
+├── .pre-commit-config.yaml # Pre-commit hooks
+├── CHANGELOG.md           # Version history
+├── CODE_OF_CONDUCT.md     # Community guidelines
+├── CONTRIBUTING.md        # Contribution guidelines
+├── LICENSE                # MIT License
+├── MANIFEST.in            # Package data files
+├── pyproject.toml         # Build configuration
+├── README.md              # This file
+├── requirements-dev.txt    # Development dependencies
+└── setup.cfg              # Additional package configuration
 ```
 
-No installation or setup is required - just clone the repository and run the main file.
+### Key Design Patterns
 
-## Project Structure
+1. **Inheritance**:
+   - `Boss` inherits from `Character`
+   - Demonstrates method overriding with `attack()`
 
-This project uses a simple, modular structure to demonstrate OOP concepts:
+2. **Composition**:
+   - `Character` contains a `Weapon`
+   - `Game` contains `Character` and `Boss`
 
-### Core Game Files
-- `main.py` - Entry point to run the game
-- `game.py` - Game class and main game logic
-- `character.py` - Character class implementation
-- `boss.py` - Boss class that inherits from Character
-- `weapon.py` - Weapon class implementation
-- `game_logger.py` - Game logging functionality
-- `console_utils.py` - Console UI utilities
-- `save_game.py` - Save/load game functionality
+3. **Encapsulation**:
+   - Private attributes with getters/setters
+   - Protected attributes for inheritance
 
-### Documentation
-- `README.md` - Project documentation
-- `ROADMAP.md` - Development plans
-- `CHANGELOG.md` - Version history and changes
+4. **Dependency Injection**:
+   - `GameLogger` is injected into classes that need logging
 
-### Tests
-- `tests/` - Directory containing all test files
-  - `test_character.py` - Tests for Character class
-  - `test_boss.py` - Tests for Boss class
-  - `test_weapon.py` - Tests for Weapon class
-  - `test_game.py` - Tests for Game class
-  - `test_save_game.py` - Tests for save/load functionality
-  - `conftest.py` - Test fixtures
-- `pytest.ini` - Pytest configuration
-- `requirements-dev.txt` - Development dependencies
+## Development
 
-## COIPEA: Core OOP Concepts Demonstrated
+### Setting Up Development Environment
 
-This code demonstrates all six fundamental Object-Oriented Programming principles (COIPEA):
+1. Install development dependencies:
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
+2. Configure pre-commit hooks (optional but recommended):
+   ```bash
+   pre-commit install
+   ```
+
+### Running Tests
+
+Run all tests:
+```bash
+pytest
+```
+
+Run tests with coverage report:
+```bash
+pytest --cov=rpg_game
+```
+
+### Code Style
+
+This project uses:
+- **Black** for code formatting
+- **isort** for import sorting
+- **mypy** for static type checking
+- **pylint** for code quality
+
+Run all code quality checks:
+```bash
+black .
+isort .
+mypy src/
+pylint src/
+```
+
+## Educational Focus
+
+This project is designed to demonstrate key OOP concepts:
+
+### COIPEA: Core OOP Principles
+
 - **C**lasses and **O**bjects
 - **I**nheritance
 - **P**olymorphism
 - **E**ncapsulation
 - **A**bstraction
+
+### Key Design Patterns
+- Factory Pattern (Weapon creation)
+- State Pattern (Game states)
+- Observer Pattern (Game events)
+
+## Contributing
+
+Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) before submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ### 1. Classes and Objects
 - The code defines several classes (`GameLogger`, `Weapon`, `Character`, `Boss`, `Game`) that encapsulate data and behavior

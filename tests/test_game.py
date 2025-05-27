@@ -5,9 +5,9 @@ import pytest
 import os
 import json
 from pathlib import Path
-from game import Game
-from character import Character
-from boss import Boss
+from rpg_game.game import Game
+from rpg_game.character import Character
+from rpg_game.boss import Boss
 
 class TestGame:
     """Test cases for the Game class."""

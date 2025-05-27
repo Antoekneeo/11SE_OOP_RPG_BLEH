@@ -1,7 +1,7 @@
 """
 Tests for the Weapon class.
 """
-from weapon import Weapon
+from rpg_game.weapon import Weapon
 
 class TestWeapon:
     """Test cases for the Weapon class."""

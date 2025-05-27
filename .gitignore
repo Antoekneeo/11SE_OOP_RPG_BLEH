@@ -1,24 +1,123 @@
-# Python bytecode files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+*.pyo
+*.pyd
 
-# Distribution / packaging
-dist/
-build/
+# Virtual Environment
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Development Tools
+.pytest_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.cache/
 *.egg-info/
 
-# Virtual environments
-venv/
-env/
-ENV/
+# Build and Distribution
+build/
+dist/
+*.egg
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+.installed.cfg
 
-# IDE files
+# IDE and Editor Files
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
 
-# OS specific files
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+
+# Project Specific
+saves/*.json
+!.gitkeep
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+
+# Type Checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Local development settings
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# Local development database
+*.sqlite3
+
+# Virtual environment
+.env/
+.venv/
+ENV/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/

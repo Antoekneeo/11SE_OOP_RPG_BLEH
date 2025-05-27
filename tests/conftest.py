@@ -2,9 +2,9 @@
 Pytest configuration and fixtures for testing the RPG game.
 """
 import pytest
-from character import Character
-from boss import Boss
-from weapon import Weapon
+from rpg_game.character import Character
+from rpg_game.boss import Boss
+from rpg_game.weapon import Weapon
 
 @pytest.fixture
 def sample_weapon():
@@ -24,6 +24,6 @@ def sample_boss():
 @pytest.fixture
 def game_instance():
     """Create a game instance for testing."""
-    from game import Game
+    from rpg_game.game import Game
     game = Game()
     return game

@@ -7,21 +7,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Save Game System**:
+  - Refactored save game functionality for better testability
+  - Added `set_save_paths()` function to support testing
+  - Improved error handling and type hints in save/load operations
+- **Testing**:
+  - Added comprehensive tests for save/load functionality
+  - Improved test fixtures for temporary file handling
+  - Added test coverage for error conditions
+- **Documentation**:
+  - Added comprehensive UML class diagram to README.md
+  - Enhanced project structure documentation
+  - Added detailed design patterns documentation
+- **Code Organization**:
+  - Centralized game constants in `constants.py`
+  - Improved package initialization in `__init__.py`
+  - Cleaned up project structure by removing duplicate files
+- **Development**:
+  - Added edge case tests for character damage and weapon systems
+  - Enhanced `.gitignore` with better organization and coverage
+
+### Changed
+- **Project Structure**:
+  - Reorganized project into a proper Python package structure
+  - Added `src/` directory for source code
+  - Created comprehensive `pyproject.toml` for package configuration
+  - Added development tooling (pre-commit, black, isort, mypy, etc.)
+  - Added comprehensive documentation (README, CONTRIBUTING, CODE_OF_CONDUCT)
+  - Added MIT License
+  - Added `.pre-commit-config.yaml` for automated code quality checks
+  - Added `setup.cfg` for additional package configuration
+
+### Changed
+- **Save Game System**:
+  - Made `SAVE_DIR` and `SAVE_FILE` private
+  - Updated save/load functions to use internal getters
+  - Improved error messages for file operations
+- **Code Quality**:
+  - Updated `delete_save` function in `save_game.py` to properly handle file operations
+  - Improved error handling in game components
+  - Enhanced test assertions for better failure messages
+  - Moved all source code to `src/rpg_game/` directory
+  - Updated imports to use absolute imports
+  - Improved type hints throughout the codebase
+  - Updated README.md with new project structure and development instructions
+
 ### Fixed
 - **Testing Infrastructure**:
   - Fixed test cases in `test_character.py` to match fixture names and behavior
   - Updated `test_boss.py` to correctly test special attacks and damage calculations
   - Fixed error handling in `test_save_game.py` for file operations
   - Improved test coverage and reliability
-
-### Changed
-- **Code Quality**:
-  - Updated `delete_save` function in `save_game.py` to properly handle file operations
-  - Improved error handling in game components
-  - Enhanced test assertions for better failure messages
-  - Simplified project structure for educational use
-  - Updated documentation to emphasize educational focus
-  - Enhanced code organization with logical separation of concerns
+  - Updated test imports to work with new package structure
+- **Save Game Tests**:
+  - Fixed test failures related to file system operations
+  - Improved test isolation using proper fixtures
+  - Added proper cleanup after tests
 
 ### Added
 - **Testing Infrastructure**:

@@ -8,12 +8,12 @@ from typing import List, Optional, Dict, Any, Tuple, Union
 import random
 import json
 from pathlib import Path
-from console_utils import clear_screen, press_enter, print_border
-from character import Character
-from boss import Boss
-from game_logger import GameLogger
-from weapon import Weapon
-from save_game import save_game, load_game, delete_save
+from rpg_game.console_utils import clear_screen, press_enter, print_border
+from rpg_game.character import Character
+from rpg_game.boss import Boss
+from rpg_game.game_logger import GameLogger
+from rpg_game.weapon import Weapon
+from rpg_game.save_game import save_game, load_game, delete_save
 
 
 class Game:

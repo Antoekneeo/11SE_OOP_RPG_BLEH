@@ -1,0 +1,21 @@
+include LICENSE
+include README.md
+include CHANGELOG.md
+include ROADMAP.md
+include CONTRIBUTING.md
+include CODE_OF_CONDUCT.md
+include requirements-dev.txt
+recursive-include tests *
+recursive-include saves *
+prune __pycache__
+prune .git
+prune .github
+prune .pytest_cache
+prune .mypy_cache
+prune .hypothesis
+prune .tox
+prune .nox
+prune htmlcov
+prune build
+prune dist
+prune *.egg-info

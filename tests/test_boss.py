@@ -4,10 +4,10 @@ Tests for the Boss class.
 import pytest
 import random
 from unittest.mock import patch, Mock
-from boss import Boss
-from character import Character
-from weapon import Weapon
-from game_logger import GameLogger
+from rpg_game.boss import Boss
+from rpg_game.character import Character
+from rpg_game.weapon import Weapon
+from rpg_game.game_logger import GameLogger
 
 @pytest.fixture
 def sample_boss():
